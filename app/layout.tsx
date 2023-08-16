@@ -7,9 +7,9 @@ import { ptBR } from "@clerk/localizations";
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  // icons:{
-  //   icon: './public/logo.png',
-  // },
+  icons:{
+    icon: './public/favicon/favicon.ico',
+  },
   title: 'AIHorizon',
   description: 'Plataforma de IA baseada em SaaS, API - openIA, Front-End - Next.js 13, React, Tailwind, Prisma e Stripe.',
 }
