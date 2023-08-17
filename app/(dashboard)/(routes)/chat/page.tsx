@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils";
 import { formSchema } from "./constants";
 import { useState } from "react";
 
-const chatPage = () => {
+const ChatPage = () => {
     const router = useRouter();
     const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
 
@@ -141,4 +141,4 @@ const chatPage = () => {
     );
 }
 
-export default chatPage;
+export default ChatPage;
