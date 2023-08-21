@@ -6,8 +6,15 @@ import { ImageIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { ChatCompletionRequestMessage } from "openai";
+import { useState } from "react";
 
+import { 
+    Select, 
+    SelectContent, 
+    SelectItem, 
+    SelectTrigger, 
+    SelectValue 
+} from "@/components/ui/select";
 import { Heading } from "@/components/heading";
 import {
     Form,
@@ -19,21 +26,20 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
-import { UserAvatar } from "@/components/user-avatar";
-import { BotAvatar } from "@/components/bot-avatar";
 import { cn } from "@/lib/utils";
 
-import { formSchema } from "./constants";
-import { useState } from "react";
+import { amountOptions, formSchema } from "./constants";
 
 const ImagemPage = () => {
     const router = useRouter();
-    const [messages, setMessages] = useState<ChatCompletionRequestMessage[]>([]);
+    const [imagens, setImagens ] = useState<string[]>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            prompt: ""
+            prompt: "",
+            amount: "1",
+            resolution: "512x512"
         }
     });
 
@@ -41,18 +47,13 @@ const ImagemPage = () => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            const userMessage: ChatCompletionRequestMessage = {
-                role: "user",
-                content: values.prompt,
-            };
-            const newMessages = [...messages, userMessage];
+            setImagens([]);
 
-            const response = await axios.post("/api/chat", {
-                messages: newMessages
-            })
+            const response = await axios.post("/api/imagem", values)
 
-            setMessages((current) => [...current, userMessage, response.data]);
+            const urls = response.data.map((imagem: {url: string}) => imagem.url);
 
+            setImagens(urls);
             form.reset();
         } catch (error: any) {
             // TODO: Open Pro Modal
@@ -92,15 +93,45 @@ const ImagemPage = () => {
                             <FormField
                                 name="prompt"
                                 render={({ field }) => (
-                                    <FormItem className="col-span-12 lg:col-span-10">
+                                    <FormItem className="col-span-12 lg:col-span-6">
                                         <FormControl className="m-0 p-0">
                                             <Input
                                                 className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                                                 disabled={isLoading}
-                                                placeholder="Como calcular o raio de um círculo?"
+                                                placeholder="Uma foto de um golden retriever"
                                                 {...field}
                                             />
                                         </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="amount"
+                                render={({ field }) => (
+                                    <FormItem className="col-span-12 lg:col-span-2">
+                                        <Select
+                                            disabled={isLoading}
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue defaultValue={field.value}/>
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {amountOptions.map((option) => (
+                                                    <SelectItem
+                                                    key={option.value}
+                                                    value={option.value}
+                                                    >
+                                                        {option.label}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
                                     </FormItem>
                                 )}
                             />
@@ -112,28 +143,15 @@ const ImagemPage = () => {
                 </div>
                 <div className="space-y-4 mt-4">
                     {isLoading && (
-                        <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+                        <div className="p-20">
                             <Loader />
                         </div>
                     )}
-                    {messages.length === 0 && !isLoading && (
-                        <Empty label="Nenhuma conversa iniciada!" />
+                    {imagens.length === 0 && !isLoading && (
+                        <Empty label="Nenhuma imagem gerada!" />
                     )}
-                    <div className="flex flex-col-reverse gap-y-4">
-                        {messages.map((message) => (
-                            <div
-                                key={message.content}
-                                className={cn(
-                                    "p-8 w-full flex items-start gap-x-8 rounded-lg",
-                                    message.role === "user" ? "bg-white border border-black/10" : "bg-muted"
-                                )}
-                            >
-                                {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
-                                <p className="text-sm">
-                                    {message.content}
-                                </p>
-                            </div>
-                        ))}
+                    <div>
+                        Imagens vao ser redenrizadas aqui
                     </div>
                 </div>
             </div>
