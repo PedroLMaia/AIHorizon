@@ -39,7 +39,7 @@ Primeiro crie um banco de dados mySQL na PlanetScale e configure o .env
 ```shell
 npx prisma db push
 ```
-Se precisar apagar seu banco de dados
+Caso precisar apagar seu banco de dados
 ```shell
 npx prisma migrate reset
 ```
@@ -53,7 +53,7 @@ npx prisma studio
 ```
 
 ### Iniciar o WebHook - Stripe localmente
-Precisa fazer o donwload do CLI do Stripe e adicioná-lo ao seu path environment.
+Precisa fazer o download do CLI do Stripe e adicioná-lo ao seu path environment.
 ```shell
 stripe listen --forward-to localhost:3000/api/webhook
 ```
