@@ -30,7 +30,7 @@ export const SubscriptionButton = ({
     }
 
     return (
-        <Button disabled={loading} variant={isPro ? "sub" : "premium"} onClick={onClick}>
+        <Button disabled={loading} variant={isPro ? "default" : "premium"} onClick={onClick}>
             {isPro ? "Gerenciar assinatura" : "Upgrade"}
             {!isPro && <Zap className="w-4 h-4 ml-2 fill-white" />}
         </Button>

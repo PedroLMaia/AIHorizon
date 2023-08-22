@@ -9,7 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        default: "bg-primary text-primary-foreground hover:bg-gradient-to-r from-red-500 to-orange-500 hover:text-white",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
@@ -20,6 +20,8 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         sub: "bg-primary text-primary-foreground hover:bg-gray-900",
         premium: "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border-0",
+        register: "bg-white hover:bg-gradient-to-r from-red-500 to-orange-500 hover:text-white",
+        login: "bg-white text-violet-700 hover:bg-gradient-to-r from-red-500 to-orange-500 hover:text-white",
       },
       size: {
         default: "h-10 px-4 py-2",
