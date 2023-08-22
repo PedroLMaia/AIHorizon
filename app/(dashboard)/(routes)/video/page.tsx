@@ -2,11 +2,10 @@
 
 import axios from "axios";
 import * as z from "zod";
-import { Music } from "lucide-react";
+import { VideoIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { ChatCompletionRequestMessage } from "openai";
 
 import { Heading } from "@/components/heading";
 import {
@@ -23,9 +22,9 @@ import { Loader } from "@/components/loader";
 import { formSchema } from "./constants";
 import { useState } from "react";
 
-const MusicaPage = () => {
+const VideoPage = () => {
     const router = useRouter();
-    const [musica, setMusica] = useState<string>();
+    const [video, setVideo] = useState<string>();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -38,11 +37,11 @@ const MusicaPage = () => {
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
-            setMusica(undefined);
+            setVideo(undefined);
 
-            const response = await axios.post("/api/musica", values)
+            const response = await axios.post("/api/video", values)
 
-            setMusica(response.data);
+            setVideo(response.data[0]);
             form.reset();
         } catch (error: any) {
             // TODO: Open Pro Modal
@@ -55,14 +54,14 @@ const MusicaPage = () => {
     return (
         <div>
             <Heading
-                title="Gerador de Música"
-                description="Gerador de Música mais avançado."
-                icon={Music}
-                iconColor="text-green-500"
-                bgColor="bg-green-500/10"
+                title="Gerador de Video"
+                description="Gerador de Video mais avançado."
+                icon={VideoIcon}
+                iconColor="text-orange-500"
+                bgColor="bg-orange-500/10"
             />
             <div className="px-4 lg:px-8">
-                <div>
+                <div className="px-4 lg:px-8">
                     <Form {...form}>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
@@ -87,7 +86,7 @@ const MusicaPage = () => {
                                             <Input
                                                 className="border-0 outline-none focus-visible:ring-0 focus-visible:ring-transparent"
                                                 disabled={isLoading}
-                                                placeholder="Solo de guitarra"
+                                                placeholder="Cachorros fofinhos"
                                                 {...field}
                                             />
                                         </FormControl>
@@ -102,22 +101,22 @@ const MusicaPage = () => {
                 </div>
                 <div className="space-y-4 mt-4">
                     {isLoading && (
-                        <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+                        <div className="p-20">
                             <Loader />
                         </div>
                     )}
-                    {!musica && !isLoading && (
-                        <Empty label="Nenhuma música gerada!" />
+                    {!video && !isLoading && (
+                        <Empty label="No video generated." />
                     )}
-                   {musica && (
-                       <audio controls className="w-full mt-8">
-                        <source src={musica}/>
-                       </audio>
-                   )}
+                    {video && (
+                        <video className="w-full aspect-video mt-8 rounded-lg border bg-black" controls>
+                            <source src={video} />
+                        </video>
+                    )}
                 </div>
             </div>
         </div>
     );
 }
 
-export default MusicaPage;
+export default VideoPage;
