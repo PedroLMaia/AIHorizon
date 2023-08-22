@@ -2,18 +2,19 @@
 
 import axios from "axios";
 import * as z from "zod";
-import { ImageIcon } from "lucide-react";
+import { Download, ImageIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Image from "next/image";
 
-import { 
-    Select, 
-    SelectContent, 
-    SelectItem, 
-    SelectTrigger, 
-    SelectValue 
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue
 } from "@/components/ui/select";
 import { Heading } from "@/components/heading";
 import {
@@ -28,11 +29,16 @@ import { Empty } from "@/components/empty";
 import { Loader } from "@/components/loader";
 import { cn } from "@/lib/utils";
 
-import { amountOptions, formSchema } from "./constants";
+import {
+    amountOptions,
+    formSchema,
+    resolutionOptions
+} from "./constants";
+import { Card, CardFooter } from "@/components/ui/card";
 
 const ImagemPage = () => {
     const router = useRouter();
-    const [imagens, setImagens ] = useState<string[]>([]);
+    const [imagens, setImagens] = useState<string[]>([]);
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -49,9 +55,11 @@ const ImagemPage = () => {
         try {
             setImagens([]);
 
+            console.log(values)
+
             const response = await axios.post("/api/imagem", values)
 
-            const urls = response.data.map((imagem: {url: string}) => imagem.url);
+            const urls = response.data.map((imagem: { url: string }) => imagem.url);
 
             setImagens(urls);
             form.reset();
@@ -118,14 +126,44 @@ const ImagemPage = () => {
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
-                                                    <SelectValue defaultValue={field.value}/>
+                                                    <SelectValue defaultValue={field.value} />
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
                                                 {amountOptions.map((option) => (
                                                     <SelectItem
-                                                    key={option.value}
-                                                    value={option.value}
+                                                        key={option.value}
+                                                        value={option.value}
+                                                    >
+                                                        {option.label}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormItem>
+                                )}
+                            />
+                            <FormField
+                                control={form.control}
+                                name="resolution"
+                                render={({ field }) => (
+                                    <FormItem className="col-span-12 lg:col-span-2">
+                                        <Select
+                                            disabled={isLoading}
+                                            onValueChange={field.onChange}
+                                            value={field.value}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue defaultValue={field.value} />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {resolutionOptions.map((option) => (
+                                                    <SelectItem
+                                                        key={option.value}
+                                                        value={option.value}
                                                     >
                                                         {option.label}
                                                     </SelectItem>
@@ -150,8 +188,31 @@ const ImagemPage = () => {
                     {imagens.length === 0 && !isLoading && (
                         <Empty label="Nenhuma imagem gerada!" />
                     )}
-                    <div>
-                        Imagens vao ser redenrizadas aqui
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-8">
+                        {imagens.map((src) => (
+                            <Card
+                                key={src}
+                                className="rounded-lg overflow-hidden"
+                            >
+                                <div className="relative aspect-square">
+                                    <Image
+                                        alt="Imagem"
+                                        fill
+                                        src={src}
+                                    />
+                                </div>
+                                <CardFooter className="p-2">
+                                    <Button
+                                        onClick={() => window.open(src)}
+                                        variant="secondary"
+                                        className="w-full bg-gray-900 hover:bg-gray-800 text-white"
+                                    >
+                                        <Download className="h-4 w-4 mr-2" />
+                                        Download
+                                    </Button>
+                                </CardFooter>
+                            </Card>
+                        ))}
                     </div>
                 </div>
             </div>
