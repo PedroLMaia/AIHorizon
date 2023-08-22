@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { ChatCompletionRequestMessage } from "openai";
+import { toast } from "react-hot-toast";
 
 import { Heading } from "@/components/heading";
 import {
@@ -57,8 +58,10 @@ const ChatPage = () => {
 
             form.reset();
         } catch (error: any) {
-            if(error?.response?.status === 403){
+            if (error?.response?.status === 403) {
                 proModal.onOpen();
+            } else {
+                toast.error("Algo deu errado!")
             }
         } finally {
             router.refresh();

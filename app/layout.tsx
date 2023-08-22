@@ -5,11 +5,13 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ptBR } from "@clerk/localizations";
 
 import { ModalProvider } from '@/components/modal-provider';
+import { ToasterProvider } from '@/components/toaster-provider';
+import { CrispProvider } from '@/components/crisp-provider';
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  icons:{
+  icons: {
     icon: './public/favicon/favicon.ico',
   },
   title: 'AIHorizon',
@@ -24,10 +26,12 @@ export default function RootLayout({
   return (
     <ClerkProvider localization={ptBR}>
       <html lang="pt-BR">
+        <CrispProvider />
         <body className={inter.className}>
           <ModalProvider />
+          <ToasterProvider />
           {children}
-          </body>
+        </body>
       </html>
     </ClerkProvider>
   )

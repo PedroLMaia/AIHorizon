@@ -6,6 +6,7 @@ import { VideoIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 import { Heading } from "@/components/heading";
 import {
@@ -48,6 +49,8 @@ const VideoPage = () => {
         } catch (error: any) {
             if(error?.response?.status === 403){
                 proModal.onOpen();
+            } else {
+                toast.error("Algo deu errado!")
             }
         } finally {
             router.refresh();

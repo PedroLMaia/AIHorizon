@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
+import toast from "react-hot-toast";
 
 import {
     Select,
@@ -68,6 +69,8 @@ const ImagemPage = () => {
         } catch (error: any) {
             if(error?.response?.status === 403){
                 proModal.onOpen();
+            } else {
+                toast.error("Algo deu errado!")
             }
         } finally {
             router.refresh();
