@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import {
     Check,
     Code,
@@ -8,7 +9,8 @@ import {
     Music,
     VideoIcon,
     Zap
-  } from "lucide-react";
+} from "lucide-react";
+import { useState } from "react";
 
 import {
     Dialog,
@@ -26,39 +28,53 @@ import { Button } from "@/components/ui/button";
 
 const tools = [
     {
-      label: "Chat",
-      icon: MessageSquare,
-      color: "text-violet-500",
-      bgColor: "bg-violet-500/10",
+        label: "Chat",
+        icon: MessageSquare,
+        color: "text-violet-500",
+        bgColor: "bg-violet-500/10",
     },
     {
-      label: "Gerar Música",
-      icon: Music,
-      color: "text-green-500",
-      bgColor: "bg-green-500/10",
+        label: "Gerar Música",
+        icon: Music,
+        color: "text-green-500",
+        bgColor: "bg-green-500/10",
     },
     {
-      label: "Gerar Imagem",
-      icon: ImageIcon,
-      color: "text-pink-500",
-      bgColor: "bg-pink-500/10",
+        label: "Gerar Imagem",
+        icon: ImageIcon,
+        color: "text-pink-500",
+        bgColor: "bg-pink-500/10",
     },
     {
-      label: "Gerar Video",
-      icon: VideoIcon,
-      color: "text-orange-500",
-      bgColor: "bg-orange-500/10",
+        label: "Gerar Video",
+        icon: VideoIcon,
+        color: "text-orange-500",
+        bgColor: "bg-orange-500/10",
     },
     {
-      label: "Gerar Codigo",
-      icon: Code,
-      color: "text-red-500",
-      bgColor: "bg-red-500/10",
+        label: "Gerar Codigo",
+        icon: Code,
+        color: "text-red-500",
+        bgColor: "bg-red-500/10",
     }
-  ]
+]
 
 export const ProModal = () => {
     const proModal = useProModal();
+    const [loading, setLoading] = useState(false);
+
+    const onSubscribe = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.get("/api/stripe");
+
+            window.location.href = response.data.url;
+        } catch (error) {
+            console.log(error, "STRIPE_CLIENT_ERROR");
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <Dialog open={proModal.isOpen} onOpenChange={proModal.onClose}>
@@ -75,30 +91,31 @@ export const ProModal = () => {
                     <DialogDescription className="text-center pt-2 space-y-2 text-zinc-900 font-medium">
                         {tools.map((tool) => (
                             <Card
-                            key={tool.label}
-                            className="p-3 border-black/5 flex items-center justify-between"
+                                key={tool.label}
+                                className="p-3 border-black/5 flex items-center justify-between"
                             >
                                 <div className="flex items-center gap-x-4">
                                     <div className={cn("p-2 w-fit rounded-md", tool.bgColor)}>
-                                        <tool.icon className={cn("w-6 h-6", tool.color)}/>
+                                        <tool.icon className={cn("w-6 h-6", tool.color)} />
                                     </div>
                                     <div className="font-semibold text-sm">
                                         {tool.label}
                                     </div>
                                 </div>
-                                <Check className="text-primary w-5 h-5"/>
+                                <Check className="text-primary w-5 h-5" />
                             </Card>
                         ))}
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
                     <Button
-                    size="lg"
-                    variant="premium"
-                    className="w-full"
+                        onClick={onSubscribe}
+                        size="lg"
+                        variant="premium"
+                        className="w-full"
                     >
                         Upgrade
-                        <Zap className="w-4 h-4 ml-2 fill-white"/>
+                        <Zap className="w-4 h-4 ml-2 fill-white" />
                     </Button>
                 </DialogFooter>
             </DialogContent>

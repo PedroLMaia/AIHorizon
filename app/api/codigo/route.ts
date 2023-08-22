@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { Configuration, OpenAIApi, ChatCompletionRequestMessage } from "openai";
 
 import { increaseApiLimit, checkApiLimit } from "@/lib/api-limit";
-
+import { checkSubscription } from "@/lib/subscription";
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -37,17 +37,20 @@ export async function POST(
     }
 
     const freeTrials = await checkApiLimit();
+    const isPro = await checkSubscription();
 
-    if(!freeTrials) {
+    if (!freeTrials && !isPro) {
       return new NextResponse("Free trials chegou ao limite.", { status: 403 });
     }
-
-    await increaseApiLimit();
 
     const response = await openai.createChatCompletion({
       model: "gpt-3.5-turbo",
       messages: [instrucoesMessage, ...messages]
     });
+    
+    if (!isPro) {
+      await increaseApiLimit();
+    }
 
     return NextResponse.json(response.data.choices[0].message);
   } catch (error) {
