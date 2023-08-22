@@ -58,7 +58,7 @@ Precisa fazer o donwload do CLI do Stripe e adicioná-lo ao seu path environment
 stripe listen --forward-to localhost:3000/api/webhook
 ```
 ### Iniciar o WebHook - Stripe remoto
-Quando fiz o deploy pode usar o Endpoints hospedados no mesmo padrão.
+Quando fizer o deploy pode usar o Endpoints hospedados no mesmo padrão.
 ```shell
 Exemplo: https://URL/api/webhook
 WebHooks usados: invoice.payment_succeeded, checkout.session.completed
