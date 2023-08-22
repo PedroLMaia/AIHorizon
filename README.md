@@ -39,7 +39,7 @@ Primeiro crie um banco de dados mySQL na PlanetScale e configure o .env
 ```shell
 npx prisma db push
 ```
-Caso precisar apagar seu banco de dados
+Caso precise apagar seu banco de dados
 ```shell
 npx prisma migrate reset
 ```
