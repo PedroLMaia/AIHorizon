@@ -2,7 +2,7 @@
 ![Cap](https://raw.githubusercontent.com/PedroLMaia/Portfolio/main/public/ai-horizon.png)
 
 ### Descrição
-A Plataforma AI Horizon é um serviço baseado em SaaS, que aproveita as APIs da OpenAI e da Replicate, além de integrar diversos outros recursos como Stripe, Clerk e Crisp-chat com webhooks. Foi desenvolvida utilizando Next 13, Tailwind CSS, Prisma e MySQL com a plataforma de banco de dados PlanetScale. Também inclui integração com Stripe para pagamentos, Clerk para autenticação e Crisp-chat para criar um chat de suporte.
+AI Horizon é uma plataforma de serviço baseado em SaaS (Software como Serviço), que aproveita as APIs da OpenAI e da Replicate, além de integrar diversos outros recursos como Stripe, Clerk e Crisp-chat com webhooks. Foi desenvolvida utilizando Next 13, Tailwind CSS, Prisma e MySQL com a plataforma de banco de dados PlanetScale. Também inclui integração com Stripe para pagamentos, Clerk para autenticação e Crisp-chat para criar um chat de suporte.
 
 ### Instalar pacotes
 
