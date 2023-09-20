@@ -80,3 +80,19 @@ body,
     @apply bg-background text-foreground;
   }
 }
+
+/* Estilo padrão da barra de rolagem (oculta) */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Estilize o visual da barra de rolagem como desejar */
+::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 10px;
+}
+
+/* Estilo da barra de rolagem quando o mouse passa sobre o contêiner */
+:hover::-webkit-scrollbar-thumb {
+  background-color: #555; /* Cor da barra de rolagem no hover */
+}
